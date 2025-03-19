@@ -1,0 +1,21 @@
+class: DeezerArtist
+table: deezer_artist
+fields:
+  did: int
+  name: String
+  link: String
+  share: String?
+  picture: String?
+  pictureSmall: String?
+  pictureMedium: String?
+  pictureBig: String?
+  pictureXl: String?
+  nbAlbum: int?
+  nbFan: int?
+  radio: bool?
+  tracklist: String?
+  type: String
+indexes:
+  did_name_idx:
+    fields: did
+    unique: true

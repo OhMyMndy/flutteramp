@@ -1,0 +1,17 @@
+class: DeezerAlbum
+table: deezer_album
+fields:
+  did: int
+  name: String
+  link: String
+  share: String
+  picture: String
+  pictureSmall: String
+  pictureMedium: String
+  pictureBig: String
+  pictureXl: String
+  nbAlbum: int
+  nbFan: int
+  radio: bool
+  tracklist: String
+  type: String

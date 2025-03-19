@@ -1,0 +1,44 @@
+#$schema: https://raw.githubusercontent.com/Kong/go-database-reconciler/refs/heads/main/pkg/file/kong_json_schema.json
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: setlist-fm
+    url: https://www.setlist.fm/
+    read_timeout: 10000
+    retries: 2
+    routes:
+      - name: setlist-fm-route
+        paths:
+          - "/setlist-fm"
+    plugins:
+      - name: proxy-cache
+        config:
+          cache_ttl: 3600
+          strategy: memory
+          content_type:
+            - 'application/json'
+            - 'text/html'
+
+
+
+
+  - name: api-deezer-com
+    url: http://proxy:80
+    protocol: https
+    retries: 2
+    read_timeout: 10000
+    connect_timeout: 1000
+
+    routes:
+      - name: api-deezer-route
+        paths:
+          - "/deezer"
+    plugins:
+    - name: proxy-cache
+      config:
+        cache_ttl: 3600
+        strategy: memory
+        content_type:
+          - 'application/json'
+          - 'text/html'
