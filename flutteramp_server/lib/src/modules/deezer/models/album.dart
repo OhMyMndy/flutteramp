@@ -7,19 +7,19 @@ class Album implements _i1.TableRow, _i1.ProtocolSerialization {
   int? id;
 
   String title;
-  String link;
+  String? link;
   String? cover;
   String? coverSmall;
   String? coverMedium;
   String? coverBig;
   String? coverXl;
   String? md5Image;
-  String releaseDate;
-  String recordType;
-  bool available;
+  String? releaseDate;
+  String? recordType;
+  bool? available;
   String tracklist;
-  bool explicitLyrics;
-  int timeAdd;
+  bool? explicitLyrics;
+  int? timeAdd;
   Artist artist;
   String type;
 
@@ -49,19 +49,19 @@ class Album implements _i1.TableRow, _i1.ProtocolSerialization {
     return Album(
       id: jsonSerialization['id'] as int,
       title: jsonSerialization['title'] as String,
-      link: jsonSerialization['link'] as String,
+      link: jsonSerialization['link'] as String?,
       cover: jsonSerialization['cover'] as String,
       coverSmall: jsonSerialization['cover_small'] as String?,
       coverMedium: jsonSerialization['cover_medium'] as String?,
       coverBig: jsonSerialization['cover_big'] as String?,
       coverXl: jsonSerialization['cover_xl'] as String?,
       md5Image: jsonSerialization['md5_image'] as String?,
-      releaseDate: jsonSerialization['release_date'] as String,
-      recordType: jsonSerialization['record_type'] as String,
-      available: jsonSerialization['available'] as bool,
+      releaseDate: jsonSerialization['release_date'] as String?,
+      recordType: jsonSerialization['record_type'] as String?,
+      available: jsonSerialization['available'] as bool?,
       tracklist: jsonSerialization['tracklist'] as String,
-      explicitLyrics: jsonSerialization['explicit_lyrics'] as bool,
-      timeAdd: jsonSerialization['time_add'] as int,
+      explicitLyrics: jsonSerialization['explicit_lyrics'] as bool?,
+      timeAdd: jsonSerialization['time_add'] as int?,
       artist: Artist.fromJson(jsonSerialization['artist']),
       type: jsonSerialization['type'] as String,
     );

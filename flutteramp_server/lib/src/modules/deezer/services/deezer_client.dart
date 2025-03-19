@@ -3,7 +3,8 @@ import 'package:sprintf/sprintf.dart';
 
 import '../models/album.dart';
 import '../models/artist.dart';
-
+import '../helpers.dart';
+import '../models/track.dart';
 class DeezerClient {
   // implements ConnectorClient {
 
@@ -90,8 +91,11 @@ class DeezerClient {
 
   Future<Artist?> getArtistByName(String name) async {
     final response = await dio.request(
-      sprintf('/search/artist/?q=%s', [Uri.encodeComponent(name)]),
+      '/search/artist/',
       options: Options(method: 'GET'),
+      queryParameters: {
+        "q": name
+      }
     );
 
     if (response.statusCode != 200) {
@@ -149,5 +153,32 @@ class DeezerClient {
     }
 
     return albums;
+  }
+
+  Future<Track?> getTrack(String name, String artist) async {
+    String q = sprintf("%s - %s", [artist, name]);
+    final response = await dio.request(
+      '/search/track/',
+      options: Options(method: 'GET'),
+      queryParameters: {
+        "q": q
+      }
+    );
+
+
+    if (response.statusCode != 200) {
+      throw Exception(sprintf("Error when getting artist with name '%s': %s",
+          [name, response.toString()]));
+    }
+
+    for (var trackItem in response.data["data"]) {
+      var track = Track.fromJson(trackItem);
+
+      if (levenshtein(trackItem["title"], name) < 3 && levenshtein(trackItem['artist']['name'], artist) < 3) {
+        return track;
+      }
+    }
+
+    return null;
   }
 }

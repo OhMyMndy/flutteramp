@@ -1,8 +1,10 @@
 import 'package:flutteramp_server/src/generated/artist.dart';
 import 'package:flutteramp_server/src/modules/deezer/services/deezer_client.dart';
+import 'package:flutteramp_server/src/modules/setlist-fm/models/setlist.dart';
 import 'package:serverpod/server.dart';
 
 import '../modules/deezer/models/artist.dart' as da;
+import '../modules/deezer/models/track.dart';
 
 class DeezerService {
   DeezerClient client;
@@ -36,6 +38,23 @@ class DeezerService {
     return true;
   }
 
+  Future<List<Track>> getDeezerTracksFromSetlistFmSetlist(
+      Setlist setlists) async {
+    List<Track> tracks = [];
+    for (var setlist in setlists.setlist.entries) {
+      for (var song in setlist.value) {
+        var track = await client.getTrack(song, setlists.artist.name);
+
+        if (track != null) {
+          tracks.add(track);
+        } else {
+          // TODO: add to logger with debug
+        }
+      }
+    }
+    return tracks;
+  }
+
   DeezerArtist fromDeezerArtist(da.Artist artist) {
     return DeezerArtist(
         did: artist.id!,
@@ -51,7 +70,6 @@ class DeezerService {
         nbFan: artist.nbFan,
         radio: artist.radio,
         tracklist: artist.tracklist,
-        type: artist.type
-    );
+        type: artist.type);
   }
 }
