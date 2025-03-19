@@ -1,3 +1,4 @@
+import 'package:flutteramp_server/src/modules/deezer/models/album.dart';
 import 'package:flutteramp_server/src/modules/deezer/models/artist.dart';
 import 'package:flutteramp_server/src/modules/deezer/services/deezer_client.dart';
 import 'package:test/test.dart';
@@ -20,5 +21,14 @@ Future<void> main() async {
     // TODO: get without user ID and oauth token
     List<Artist> artists = await client.getUserArtist(userId: 4954552082);
     expect(artists, isNotEmpty);
+  });
+
+
+  test('DeezerClient get user albums', () async {
+    // TODO: get without user ID and oauth token
+    List<Album> albums = await client.getUserAlbums(userId: 4954552082);
+    expect(albums, isNotEmpty);
+    expect(albums.last.title, "MMXX - Hypa Hypa Edition");
+    expect(albums.last.artist.name, "Electric Callboy");
   });
 }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../models/album.dart';
 import '../models/artist.dart';
 
 class DeezerClient {
@@ -103,5 +104,50 @@ class DeezerClient {
       throw Exception(sprintf("Artist with name '%s' not found...", [name]));
     }
     return Artist.fromJson(firstArtist);
+  }
+
+  Future<List<Album>> getUserAlbums({required int userId}) async {
+    String id = userId.toString();
+    List<Album> albums = [];
+
+    int? index = 0;
+    while (true) {
+      final response = await dio.request(
+        sprintf('/user/%s/albums', [id]),
+        queryParameters: {
+          "index": index,
+        },
+        options: Options(method: 'GET'),
+      );
+      if (response.statusCode != 200) {
+        throw Exception(sprintf("Error when getting artist for user '%s': %s",
+            [id, response.toString()]));
+      }
+      var data = response.data;
+      var error = data["error"];
+      if (error != null) {
+        throw Exception(sprintf(
+            "Error when getting albums for user '%s': %s", [id, error]));
+      }
+
+      if (data["data"] is Iterable) {
+        for (var album in data["data"]) {
+          albums.add(Album.fromJson(album));
+        }
+      }
+      if (data["next"] != null) {
+        Uri uri = Uri.parse(data["next"]);
+        bool indexKey = uri.queryParameters.containsKey('index');
+        if (indexKey) {
+          index = int.parse(uri.queryParameters['index']!);
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+    return albums;
   }
 }
